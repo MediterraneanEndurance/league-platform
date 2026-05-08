@@ -18,7 +18,7 @@ export function ActionLink({ children, className, variant = "ghost", ...props }:
   return (
     <Link
       className={cn(
-        "inline-flex items-center justify-center rounded px-4 py-3 text-xs font-black uppercase tracking-[0.16em] transition duration-200",
+        "inline-flex min-h-11 items-center justify-center rounded px-4 py-3 text-center text-xs font-black uppercase tracking-[0.12em] transition duration-200 sm:tracking-[0.16em]",
         variants[variant],
         className,
       )}
@@ -39,7 +39,7 @@ export function ExternalAction({
     <a
       href={href}
       className={cn(
-        "inline-flex items-center justify-center rounded px-4 py-3 text-xs font-black uppercase tracking-[0.16em] transition duration-200",
+        "inline-flex min-h-11 items-center justify-center rounded px-4 py-3 text-center text-xs font-black uppercase tracking-[0.12em] transition duration-200 sm:tracking-[0.16em]",
         variants[variant],
         className,
       )}

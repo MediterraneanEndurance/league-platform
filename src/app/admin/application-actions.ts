@@ -2,6 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { canAccessAdmin, getAuthState } from "@/lib/auth";
+import { sendApplicationStatusEmail } from "@/lib/notifications";
 import { createSupabaseServiceClient, isSupabaseConfigured } from "@/lib/supabase-server";
 import type { AdminApplicationActionState } from "./application-action-types";
 
@@ -21,6 +22,32 @@ async function requireAdminClient() {
   return { error: "", supabase };
 }
 
+async function getApplicationContact(
+  supabase: NonNullable<Awaited<ReturnType<typeof requireAdminClient>>["supabase"]>,
+  applicationId: string,
+) {
+  const { data: application } = await supabase
+    .from("driver_applications")
+    .select("id, user_id, display_name")
+    .eq("id", applicationId)
+    .maybeSingle();
+
+  if (!application?.user_id) return null;
+
+  const { data: user } = await supabase
+    .from("users")
+    .select("email")
+    .eq("id", application.user_id)
+    .maybeSingle();
+
+  return user?.email
+    ? {
+        email: user.email,
+        displayName: application.display_name,
+      }
+    : null;
+}
+
 export async function approveDriverApplication(
   _previousState: AdminApplicationActionState,
   formData: FormData,
@@ -31,11 +58,20 @@ export async function approveDriverApplication(
   if (error || !supabase) return { ok: false, message: error };
   if (!applicationId) return { ok: false, message: "Missing application id." };
 
+  const contact = await getApplicationContact(supabase, applicationId);
+
   const { error: approvalError } = await supabase.rpc("approve_driver_application", {
     p_application_id: applicationId,
   });
 
   if (approvalError) return { ok: false, message: approvalError.message };
+
+  if (contact) {
+    await sendApplicationStatusEmail({
+      ...contact,
+      status: "approved",
+    }).catch(() => undefined);
+  }
 
   revalidatePath("/admin");
   revalidatePath("/drivers");
@@ -55,6 +91,8 @@ export async function rejectDriverApplication(
   if (!applicationId) return { ok: false, message: "Missing application id." };
   if (rejectionNote.length < 3) return { ok: false, message: "Add a short rejection note." };
 
+  const contact = await getApplicationContact(supabase, applicationId);
+
   const { error: statusError } = await supabase
     .from("driver_applications")
     .update({
@@ -66,6 +104,14 @@ export async function rejectDriverApplication(
     .eq("status", "pending");
 
   if (statusError) return { ok: false, message: statusError.message };
+
+  if (contact) {
+    await sendApplicationStatusEmail({
+      ...contact,
+      status: "rejected",
+      reason: rejectionNote,
+    }).catch(() => undefined);
+  }
 
   revalidatePath("/admin");
   revalidatePath("/register");

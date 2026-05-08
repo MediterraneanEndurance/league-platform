@@ -47,9 +47,18 @@ Auth is handled with Supabase Auth and server actions.
 Required environment variables:
 
 ```bash
+NEXT_PUBLIC_SITE_URL=https://league-platform.vercel.app
 NEXT_PUBLIC_SUPABASE_URL=...
 NEXT_PUBLIC_SUPABASE_ANON_KEY=...
 SUPABASE_SERVICE_ROLE_KEY=...
+VISIT_HASH_SALT=...
+NEXT_PUBLIC_DISCORD_INVITE=...
+NEXT_PUBLIC_TWITCH_URL=...
+NEXT_PUBLIC_TWITCH_CHANNEL=...
+NEXT_PUBLIC_KICK_URL=...
+RESEND_API_KEY=...
+RESEND_FROM_EMAIL=...
+RESEND_REPLY_TO_EMAIL=...
 ```
 
 Flow:
@@ -78,6 +87,19 @@ where email = 'steward@example.com';
 ```
 
 In production, `/admin` will not render if Supabase environment variables are missing. Local development keeps a fallback so the dashboard shell remains visible before credentials are configured.
+
+Supabase Auth URL configuration for production beta:
+
+```text
+Authentication > URL Configuration
+
+Site URL:
+https://league-platform.vercel.app
+
+Redirect URLs:
+https://league-platform.vercel.app/**
+http://localhost:3000/**
+```
 
 Security model:
 
@@ -265,3 +287,5 @@ Practical limits to watch:
 5. Deploy.
 
 For Supabase Auth redirects, add the Vercel production domain and local development URL to Supabase Auth URL settings.
+
+Approval/rejection emails use Resend when configured. Create a Resend API key, verify a sending domain or sender address, then set `RESEND_API_KEY` and `RESEND_FROM_EMAIL` in Vercel. If these values are not set, admin approval/rejection actions still work and email sending is skipped.

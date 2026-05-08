@@ -57,7 +57,7 @@ export function StandingsTable({ standings, mode }: { standings: Standing[]; mod
   return (
     <div className="overflow-hidden rounded-lg border border-white/10 bg-black/30">
       <div className="overflow-x-auto">
-        <table className="min-w-full text-left text-sm">
+        <table className="min-w-[760px] text-left text-sm">
           <thead className="sticky top-0 bg-zinc-950 text-xs uppercase tracking-[0.16em] text-zinc-400">
             <tr>
               <th className="px-4 py-3">Pos</th>
@@ -172,7 +172,7 @@ export function RaceResultsTable({ raceId }: { raceId: string }) {
   return (
     <div className="overflow-hidden rounded-lg border border-white/10 bg-black/30">
       <div className="overflow-x-auto">
-        <table className="min-w-full text-left text-sm">
+        <table className="min-w-[680px] text-left text-sm">
           <thead className="bg-white/5 text-xs uppercase tracking-[0.16em] text-zinc-400">
             <tr>
               <th className="px-4 py-3">Pos</th>

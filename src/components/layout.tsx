@@ -12,6 +12,7 @@ import { canAccessAdmin, canAccessSteward } from "@/lib/roles";
 
 const nav = [
   ["Home", "/"],
+  ["Race Control", "/race-control"],
   ["Calendar", "/calendar"],
   ["Standings", "/standings"],
   ["Drivers", "/drivers"],
@@ -41,66 +42,67 @@ export function SiteShell({ children, auth }: Readonly<{ children: React.ReactNo
     ...(canAccessSteward(auth.role) ? [["Race Control", "/steward"] as [string, string]] : []),
     ...(canAccessAdmin(auth.role) ? [["Admin", "/admin"] as [string, string]] : []),
   ];
+  const desktopNavItems = navItems.filter(([label]) => !["Teams", "Rules", "Decisions"].includes(label));
 
   return (
-    <div className="min-h-screen bg-[#050608] text-zinc-100">
+    <div className="min-h-screen overflow-x-hidden bg-[#050608] text-zinc-100">
       <VisitTracker />
       <div className="fixed inset-x-0 top-0 z-50 border-b border-white/10 bg-[#050608]/90 backdrop-blur-xl">
-        <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3">
-          <Link href="/" className="flex items-center gap-3" onClick={() => setOpen(false)}>
-            <span className="grid size-10 place-items-center rounded bg-red-600 text-white shadow-lg shadow-red-600/25">
+        <div className="mx-auto flex max-w-7xl items-center justify-between gap-3 px-3 py-3 sm:px-4">
+          <Link href="/" className="flex min-w-0 shrink-0 items-center gap-3" onClick={() => setOpen(false)}>
+            <span className="grid size-9 shrink-0 place-items-center rounded bg-red-600 text-white shadow-lg shadow-red-600/25 sm:size-10">
               <Gauge size={22} />
             </span>
-            <span>
+            <span className="min-w-0">
               <span className="block text-sm font-black uppercase tracking-[0.2em] text-white">{leagueConfig.shortName}</span>
-              <span className="hidden text-xs uppercase tracking-[0.2em] text-zinc-500 sm:block">{leagueConfig.leagueName}</span>
+              <span className="hidden truncate text-xs uppercase tracking-[0.2em] text-zinc-500 xl:block">{leagueConfig.leagueName}</span>
             </span>
           </Link>
-          <nav className="hidden items-center gap-1 lg:flex">
-            {navItems.map(([label, href]) => (
+          <nav className="hidden min-w-0 items-center gap-0.5 lg:flex">
+            {desktopNavItems.map(([label, href]) => (
               <Link
                 key={href}
                 href={href}
                 prefetch={shouldPrefetch(href)}
-                className="rounded px-3 py-2 text-xs font-bold uppercase tracking-[0.14em] text-zinc-400 transition hover:bg-white/5 hover:text-white"
+                className="rounded px-2.5 py-2 text-[0.68rem] font-bold uppercase tracking-[0.1em] text-zinc-400 transition hover:bg-white/5 hover:text-white xl:px-3 xl:text-xs xl:tracking-[0.14em]"
               >
                 {label}
               </Link>
             ))}
           </nav>
-          <div className="hidden items-center gap-2 sm:flex">
+          <div className="hidden shrink-0 items-center gap-2 md:flex">
             <a
               href={leagueConfig.discordUrl}
-              className="rounded border border-cyan-400/40 px-3 py-2 text-xs font-bold uppercase tracking-[0.16em] text-cyan-100 transition hover:bg-cyan-400/10"
+              className="hidden rounded border border-cyan-400/40 px-3 py-2 text-xs font-bold uppercase tracking-[0.12em] text-cyan-100 transition hover:bg-cyan-400/10 xl:inline-flex"
             >
               Discord
             </a>
             <PwaInstall />
             <Link
               href="/register"
-              className="rounded bg-red-600 px-3 py-2 text-xs font-bold uppercase tracking-[0.16em] text-white transition hover:bg-red-500"
+              className="rounded bg-red-600 px-3 py-2 text-xs font-bold uppercase tracking-[0.12em] text-white transition hover:bg-red-500"
             >
               Apply
             </Link>
             {auth.userId ? (
               <form action={logoutAction}>
-                <button className="rounded border border-white/10 px-3 py-2 text-xs font-bold uppercase tracking-[0.16em] text-zinc-200 transition hover:bg-white/5" type="submit">
+                <button className="rounded border border-white/10 px-3 py-2 text-xs font-bold uppercase tracking-[0.12em] text-zinc-200 transition hover:bg-white/5" type="submit">
                   Logout
                 </button>
               </form>
             ) : (
               <>
-                <Link href="/login" className="rounded border border-white/10 px-3 py-2 text-xs font-bold uppercase tracking-[0.16em] text-zinc-200 transition hover:bg-white/5">
+                <Link href="/login" className="rounded border border-white/10 px-3 py-2 text-xs font-bold uppercase tracking-[0.12em] text-zinc-200 transition hover:bg-white/5">
                   Login
                 </Link>
-                <Link href="/signup" className="rounded border border-cyan-400/40 px-3 py-2 text-xs font-bold uppercase tracking-[0.16em] text-cyan-100 transition hover:bg-cyan-400/10">
+                <Link href="/signup" className="rounded border border-cyan-400/40 px-3 py-2 text-xs font-bold uppercase tracking-[0.12em] text-cyan-100 transition hover:bg-cyan-400/10">
                   Signup
                 </Link>
               </>
             )}
           </div>
           <div className="flex items-center gap-2 lg:hidden">
-            <div className="sm:hidden">
+            <div className="md:hidden">
               <PwaInstall />
             </div>
             <button
@@ -155,7 +157,7 @@ export function SiteShell({ children, auth }: Readonly<{ children: React.ReactNo
           </nav>
         ) : null}
       </div>
-      <main className="pb-20 pt-20 lg:pb-0">{children}</main>
+      <main className="pb-[5.5rem] pt-20 lg:pb-0">{children}</main>
       <nav className="fixed inset-x-0 bottom-0 z-40 border-t border-white/10 bg-[#050608]/95 px-3 py-2 shadow-2xl shadow-black/50 backdrop-blur-xl lg:hidden">
         <div className="mx-auto grid max-w-md grid-cols-4 gap-1">
           {mobileQuickNav.map(([label, href, Icon]) => (

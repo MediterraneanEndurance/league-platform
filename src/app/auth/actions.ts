@@ -2,12 +2,16 @@
 
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
+import { leagueConfig } from "@/lib/league-config";
 import { createSupabaseServerClient, createSupabaseServiceClient, isSupabaseConfigured } from "@/lib/supabase-server";
 import type { AuthActionState } from "./auth-types";
 
-
-
 const getText = (formData: FormData, key: string) => String(formData.get(key) ?? "").trim();
+
+function authCallbackUrl() {
+  const baseUrl = process.env.NODE_ENV === "development" ? "http://localhost:3000" : leagueConfig.siteUrl;
+  return new URL("/auth/callback?next=/register", baseUrl).toString();
+}
 
 async function provisionPublicUser(userId: string, email: string) {
   const serviceClient = createSupabaseServiceClient();
@@ -53,7 +57,13 @@ export async function signupAction(
   const supabase = await createSupabaseServerClient();
   if (!supabase) return { ok: false, message: "Account access is temporarily unavailable." };
 
-  const { data, error } = await supabase.auth.signUp({ email, password });
+  const { data, error } = await supabase.auth.signUp({
+    email,
+    password,
+    options: {
+      emailRedirectTo: authCallbackUrl(),
+    },
+  });
   if (error) return { ok: false, message: error.message };
   if (!data.user) return { ok: false, message: "Signup did not return a user." };
 
@@ -67,7 +77,7 @@ export async function signupAction(
     ok: true,
     message: data.session
       ? "Account created. You are signed in with viewer access."
-      : "Account created. Check your email if confirmation is enabled.",
+      : "Account created. Check your email, confirm the account, then return here to submit your driver application.",
   };
 }
 

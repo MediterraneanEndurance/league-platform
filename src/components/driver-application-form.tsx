@@ -28,6 +28,7 @@ type ExistingApplication = {
   teammate_info?: string;
   team_name?: string;
   status?: string;
+  rejection_note?: string;
 };
 
 function FieldError({ message }: { message?: string }) {
@@ -46,63 +47,64 @@ export function DriverApplicationForm({
   const [state, formAction, pending] = useActionState(submitDriverApplication, initialState);
   const [hasExperience, setHasExperience] = useState(existingApplication?.previous_league_experience ? "yes" : "no");
   const [hasTeammate, setHasTeammate] = useState(existingApplication?.has_teammate ? "yes" : "no");
-  const disabled = !configured || !signedIn || existingApplication?.status === "approved";
+  const locked = existingApplication?.status === "approved";
+  const disabled = !configured || !signedIn || locked;
 
   return (
     <form action={formAction} className="grid gap-5">
       <div className="grid gap-4 md:grid-cols-2">
         <label className="grid gap-2 text-sm font-semibold text-zinc-300">
           Display name
-          <input name="display_name" defaultValue={existingApplication?.display_name} className="rounded border border-white/10 bg-black p-3 text-white" required disabled={disabled} />
+          <input name="display_name" defaultValue={existingApplication?.display_name} className="min-h-12 rounded border border-white/10 bg-black p-3 text-white" required disabled={disabled} />
           <Helper>Used on standings, broadcast overlays and public entry lists.</Helper>
           <FieldError message={state.fieldErrors?.display_name} />
         </label>
 
         <label className="grid gap-2 text-sm font-semibold text-zinc-300">
           Real full name
-          <input name="real_name" defaultValue={existingApplication?.real_name} className="rounded border border-white/10 bg-black p-3 text-white" required disabled={disabled} />
+          <input name="real_name" defaultValue={existingApplication?.real_name} className="min-h-12 rounded border border-white/10 bg-black p-3 text-white" required disabled={disabled} />
           <Helper>Visible only to race control unless the league later publishes real-name rosters.</Helper>
           <FieldError message={state.fieldErrors?.real_name} />
         </label>
 
         <label className="grid gap-2 text-sm font-semibold text-zinc-300">
           Age
-          <input name="age" defaultValue={existingApplication?.age} className="rounded border border-white/10 bg-black p-3 text-white" type="number" min="13" max="80" required disabled={disabled} />
+          <input name="age" defaultValue={existingApplication?.age} className="min-h-12 rounded border border-white/10 bg-black p-3 text-white" type="number" min="13" max="80" required disabled={disabled} />
           <Helper>Required for eligibility and community safeguarding. Accepted range: 13-80.</Helper>
           <FieldError message={state.fieldErrors?.age} />
         </label>
 
         <label className="grid gap-2 text-sm font-semibold text-zinc-300">
           Country
-          <input name="country" defaultValue={existingApplication?.country} className="rounded border border-white/10 bg-black p-3 text-white" required disabled={disabled} />
+          <input name="country" defaultValue={existingApplication?.country} className="min-h-12 rounded border border-white/10 bg-black p-3 text-white" required disabled={disabled} />
           <Helper>Used for neutral flag display and regional scheduling context.</Helper>
           <FieldError message={state.fieldErrors?.country} />
         </label>
 
         <label className="grid gap-2 text-sm font-semibold text-zinc-300">
           Discord username
-          <input name="discord_username" defaultValue={existingApplication?.discord_username} className="rounded border border-white/10 bg-black p-3 text-white" required disabled={disabled} />
+          <input name="discord_username" defaultValue={existingApplication?.discord_username} className="min-h-12 rounded border border-white/10 bg-black p-3 text-white" required disabled={disabled} />
           <Helper>Race control uses Discord for briefings, steward contact and attendance checks.</Helper>
           <FieldError message={state.fieldErrors?.discord_username} />
         </label>
 
         <label className="grid gap-2 text-sm font-semibold text-zinc-300">
           Steam ID
-          <input name="steam_id" defaultValue={existingApplication?.steam_id} className="rounded border border-white/10 bg-black p-3 text-white" required disabled={disabled} />
+          <input name="steam_id" defaultValue={existingApplication?.steam_id} className="min-h-12 rounded border border-white/10 bg-black p-3 text-white" required disabled={disabled} />
           <Helper>Required to match LMU entries and prevent duplicate applications.</Helper>
           <FieldError message={state.fieldErrors?.steam_id} />
         </label>
 
         <label className="grid gap-2 text-sm font-semibold text-zinc-300">
           Car number
-          <input name="car_number" defaultValue={existingApplication?.car_number} className="rounded border border-white/10 bg-black p-3 text-white" type="number" min="1" max="999" required disabled={disabled} />
+          <input name="car_number" defaultValue={existingApplication?.car_number} className="min-h-12 rounded border border-white/10 bg-black p-3 text-white" type="number" min="1" max="999" required disabled={disabled} />
           <Helper>Must be unique across approved drivers and pending applications.</Helper>
           <FieldError message={state.fieldErrors?.car_number} />
         </label>
 
         <label className="grid gap-2 text-sm font-semibold text-zinc-300">
           Preferred LMU class
-          <select name="preferred_class" defaultValue={existingApplication?.preferred_class ?? ""} className="rounded border border-white/10 bg-black p-3 text-white" required disabled={disabled}>
+          <select name="preferred_class" defaultValue={existingApplication?.preferred_class ?? ""} className="min-h-12 rounded border border-white/10 bg-black p-3 text-white" required disabled={disabled}>
             <option value="" disabled>Select LMU class</option>
             {leagueConfig.supportedClasses.map((item) => <option key={item}>{item}</option>)}
           </select>
@@ -112,21 +114,21 @@ export function DriverApplicationForm({
 
         <label className="grid gap-2 text-sm font-semibold text-zinc-300">
           Preferred car
-          <input name="preferred_car" defaultValue={existingApplication?.preferred_car} className="rounded border border-white/10 bg-black p-3 text-white" required disabled={disabled} />
+          <input name="preferred_car" defaultValue={existingApplication?.preferred_car} className="min-h-12 rounded border border-white/10 bg-black p-3 text-white" required disabled={disabled} />
           <Helper>Use a specific LMU car if known, or describe your planned class entry.</Helper>
           <FieldError message={state.fieldErrors?.preferred_car} />
         </label>
 
         <label className="grid gap-2 text-sm font-semibold text-zinc-300">
           Safety rank / safety level
-          <input name="safety_rank" defaultValue={existingApplication?.safety_rank} className="rounded border border-white/10 bg-black p-3 text-white" required disabled={disabled} />
+          <input name="safety_rank" defaultValue={existingApplication?.safety_rank} className="min-h-12 rounded border border-white/10 bg-black p-3 text-white" required disabled={disabled} />
           <Helper>Use your known league/platform safety level, or write “new driver”.</Helper>
           <FieldError message={state.fieldErrors?.safety_rank} />
         </label>
 
         <label className="grid gap-2 text-sm font-semibold text-zinc-300">
           Team name, optional
-          <input name="team_name" defaultValue={existingApplication?.team_name} className="rounded border border-white/10 bg-black p-3 text-white" disabled={disabled} />
+          <input name="team_name" defaultValue={existingApplication?.team_name} className="min-h-12 rounded border border-white/10 bg-black p-3 text-white" disabled={disabled} />
           <Helper>Leave blank if you are applying as an independent driver.</Helper>
         </label>
       </div>
@@ -134,7 +136,7 @@ export function DriverApplicationForm({
       <div className="grid gap-4 rounded border border-white/10 bg-white/5 p-4">
         <label className="grid gap-2 text-sm font-semibold text-zinc-300">
           Previous league experience
-          <select name="previous_league_experience" value={hasExperience} onChange={(event) => setHasExperience(event.target.value)} className="rounded border border-white/10 bg-black p-3 text-white" disabled={disabled}>
+          <select name="previous_league_experience" value={hasExperience} onChange={(event) => setHasExperience(event.target.value)} className="min-h-12 rounded border border-white/10 bg-black p-3 text-white" disabled={disabled}>
             <option value="no">No</option>
             <option value="yes">Yes</option>
           </select>
@@ -144,14 +146,14 @@ export function DriverApplicationForm({
         {hasExperience === "yes" ? (
           <label className="grid gap-2 text-sm font-semibold text-zinc-300">
             Previous league experience details
-            <textarea name="previous_league_experience_details" defaultValue={existingApplication?.previous_league_experience_details} className="min-h-28 rounded border border-white/10 bg-black p-3 text-white" required disabled={disabled} />
+            <textarea name="previous_league_experience_details" defaultValue={existingApplication?.previous_league_experience_details} className="min-h-32 rounded border border-white/10 bg-black p-3 text-white" required disabled={disabled} />
             <FieldError message={state.fieldErrors?.previous_league_experience_details} />
           </label>
         ) : null}
 
         <label className="grid gap-2 text-sm font-semibold text-zinc-300">
           Has teammate/friend
-          <select name="has_teammate" value={hasTeammate} onChange={(event) => setHasTeammate(event.target.value)} className="rounded border border-white/10 bg-black p-3 text-white" disabled={disabled}>
+          <select name="has_teammate" value={hasTeammate} onChange={(event) => setHasTeammate(event.target.value)} className="min-h-12 rounded border border-white/10 bg-black p-3 text-white" disabled={disabled}>
             <option value="no">No</option>
             <option value="yes">Yes</option>
           </select>
@@ -161,7 +163,7 @@ export function DriverApplicationForm({
         {hasTeammate === "yes" ? (
           <label className="grid gap-2 text-sm font-semibold text-zinc-300">
             Teammate/friend name or Discord
-            <input name="teammate_info" defaultValue={existingApplication?.teammate_info} className="rounded border border-white/10 bg-black p-3 text-white" required disabled={disabled} />
+            <input name="teammate_info" defaultValue={existingApplication?.teammate_info} className="min-h-12 rounded border border-white/10 bg-black p-3 text-white" required disabled={disabled} />
             <FieldError message={state.fieldErrors?.teammate_info} />
           </label>
         ) : null}
@@ -186,8 +188,14 @@ export function DriverApplicationForm({
         </div>
       ) : null}
 
+      {locked ? (
+        <div className="rounded border border-cyan-400/30 bg-cyan-400/10 p-4 text-sm text-cyan-50">
+          Your application is approved. Contact Race Control if your entry details need a manual correction.
+        </div>
+      ) : null}
+
       <button
-        className="inline-flex items-center justify-center gap-2 rounded bg-red-600 px-4 py-3 text-sm font-black uppercase tracking-[0.18em] text-white transition hover:bg-red-500 disabled:cursor-not-allowed disabled:opacity-45"
+        className="inline-flex min-h-12 items-center justify-center gap-2 rounded bg-red-600 px-4 py-3 text-sm font-black uppercase tracking-[0.14em] text-white transition hover:bg-red-500 disabled:cursor-not-allowed disabled:opacity-45 sm:tracking-[0.18em]"
         type="submit"
         disabled={disabled || pending}
       >

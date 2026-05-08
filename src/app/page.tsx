@@ -69,19 +69,19 @@ export default async function Home() {
         />
         <div className="absolute inset-0 bg-[linear-gradient(110deg,rgba(5,6,8,0.98)_0%,rgba(5,6,8,0.75)_48%,rgba(5,6,8,0.96)_100%)]" />
         <div className="absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-[#050608] to-transparent" />
-        <div className="relative mx-auto grid min-h-[760px] max-w-7xl items-center gap-10 px-4 py-16 lg:grid-cols-[1.05fr_0.95fr]">
+        <div className="relative mx-auto grid min-h-[680px] max-w-7xl items-center gap-8 px-4 py-10 sm:py-16 lg:min-h-[760px] lg:grid-cols-[1.05fr_0.95fr]">
           <div className="max-w-4xl">
             <Badge tone="border-red-400/50 bg-red-600/15 text-red-100">Le Mans Ultimate League</Badge>
-            <h1 className="mt-5 text-5xl font-black uppercase leading-[0.95] text-white md:text-7xl">
+            <h1 className="mt-5 text-4xl font-black uppercase leading-[0.98] text-white sm:text-5xl md:text-7xl">
               {leagueConfig.leagueName}
             </h1>
             <p className="mt-6 max-w-2xl text-base leading-8 text-zinc-300 md:text-lg">
               Competitive endurance racing across Europe, built around clean multi-class racing,
               transparent stewarding and race-week operations that feel ready before lights out.
             </p>
-            <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-              <ExternalAction href={leagueConfig.discordUrl} variant="secondary">Join Discord</ExternalAction>
-              <ActionLink href="/register" variant="primary">Register Driver</ActionLink>
+            <div className="mt-8 grid gap-3 sm:flex sm:flex-row">
+              <ExternalAction href={leagueConfig.discordUrl} variant="secondary" className="w-full sm:w-auto">Join Discord</ExternalAction>
+              <ActionLink href="/register" variant="primary" className="w-full sm:w-auto">Register Driver</ActionLink>
             </div>
             <div className="mt-10 max-w-2xl">
               <SessionStrip />
@@ -96,17 +96,17 @@ export default async function Home() {
             </div>
             <h2 className="text-3xl font-black uppercase text-white">{publicNextRace.name}</h2>
             <p className="mt-2 text-zinc-400">{publicNextRace.trackName}</p>
-            <div className="mt-6 grid grid-cols-3 gap-3">
+            <div className="mt-6 grid grid-cols-3 gap-2 sm:gap-3">
               <div className="rounded bg-white/5 p-4 text-center">
-                <span className="block text-3xl font-black text-cyan-200">{countdown.days}</span>
+                <span className="block text-2xl font-black text-cyan-200 sm:text-3xl">{countdown.days}</span>
                 <span className="text-xs uppercase tracking-[0.16em] text-zinc-500">Days</span>
               </div>
               <div className="rounded bg-white/5 p-4 text-center">
-                <span className="block text-3xl font-black text-white">{countdown.hours}</span>
+                <span className="block text-2xl font-black text-white sm:text-3xl">{countdown.hours}</span>
                 <span className="text-xs uppercase tracking-[0.16em] text-zinc-500">Hours</span>
               </div>
               <div className="rounded bg-white/5 p-4 text-center">
-                <span className="block text-3xl font-black text-white">{raceLength}</span>
+                <span className="block text-lg font-black text-white sm:text-3xl">{raceLength}</span>
                 <span className="text-xs uppercase tracking-[0.16em] text-zinc-500">Format</span>
               </div>
             </div>
@@ -115,7 +115,7 @@ export default async function Home() {
               <Badge>{publicNextRace.setup}</Badge>
             </div>
             <p className="mt-5 flex items-center gap-2 text-sm text-zinc-400"><Clock3 size={16} /> {formatRaceDate(publicNextRace.raceDate)} | {publicNextRace.format}</p>
-            <ActionLink href={`/races/${publicNextRace.id}`} className="mt-6 w-full">View Race Control</ActionLink>
+            <ActionLink href="/race-control" className="mt-6 w-full">View Race Control</ActionLink>
           </Card>
         </div>
       </section>

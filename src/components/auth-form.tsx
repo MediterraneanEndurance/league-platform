@@ -21,7 +21,7 @@ export function AuthForm({ mode }: Readonly<{ mode: "login" | "signup" }>) {
       <label className="grid gap-2 text-sm font-semibold text-zinc-300">
         Email
         <input
-          className="rounded border border-white/10 bg-black p-3 text-white"
+          className="min-h-12 rounded border border-white/10 bg-black p-3 text-white"
           name="email"
           type="email"
           autoComplete="email"
@@ -32,7 +32,7 @@ export function AuthForm({ mode }: Readonly<{ mode: "login" | "signup" }>) {
       <label className="grid gap-2 text-sm font-semibold text-zinc-300">
         Password
         <input
-          className="rounded border border-white/10 bg-black p-3 text-white"
+          className="min-h-12 rounded border border-white/10 bg-black p-3 text-white"
           name="password"
           type="password"
           autoComplete={isSignup ? "new-password" : "current-password"}
@@ -45,7 +45,7 @@ export function AuthForm({ mode }: Readonly<{ mode: "login" | "signup" }>) {
         <label className="grid gap-2 text-sm font-semibold text-zinc-300">
           Confirm password
           <input
-            className="rounded border border-white/10 bg-black p-3 text-white"
+            className="min-h-12 rounded border border-white/10 bg-black p-3 text-white"
             name="confirm_password"
             type="password"
             autoComplete="new-password"
@@ -63,7 +63,7 @@ export function AuthForm({ mode }: Readonly<{ mode: "login" | "signup" }>) {
       ) : null}
 
       <button
-        className="inline-flex items-center justify-center gap-2 rounded bg-red-600 px-4 py-3 text-sm font-black uppercase tracking-[0.18em] text-white transition hover:bg-red-500 disabled:cursor-not-allowed disabled:opacity-50"
+        className="inline-flex min-h-12 items-center justify-center gap-2 rounded bg-red-600 px-4 py-3 text-sm font-black uppercase tracking-[0.14em] text-white transition hover:bg-red-500 disabled:cursor-not-allowed disabled:opacity-50 sm:tracking-[0.18em]"
         type="submit"
         disabled={pending}
       >
