@@ -29,8 +29,17 @@ function countdownParts(value: string) {
   };
 }
 
+async function getSafeHomepageActivity() {
+  try {
+    return await getHomepageActivity();
+  } catch (error) {
+    console.error("Race control activity failed to load", error);
+    return null;
+  }
+}
+
 export default async function RaceControlPage() {
-  const activity = await getHomepageActivity();
+  const activity = await getSafeHomepageActivity();
   const race = activity?.nextRace ?? fallbackNextRace();
   const countdown = countdownParts(race.raceDate);
 
