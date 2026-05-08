@@ -42,29 +42,29 @@ export function SiteShell({ children, auth }: Readonly<{ children: React.ReactNo
     ...(canAccessSteward(auth.role) ? [["Race Control", "/steward"] as [string, string]] : []),
     ...(canAccessAdmin(auth.role) ? [["Admin", "/admin"] as [string, string]] : []),
   ];
-  const desktopNavItems = navItems.filter(([label]) => !["Teams", "Rules", "Decisions"].includes(label));
+  const desktopNavItems = navItems.filter(([label]) => !["Teams", "Rules", "Decisions", "Live"].includes(label));
 
   return (
     <div className="min-h-screen overflow-x-hidden bg-[#050608] text-zinc-100">
       <VisitTracker />
       <div className="fixed inset-x-0 top-0 z-50 border-b border-white/10 bg-[#050608]/90 backdrop-blur-xl">
-        <div className="mx-auto flex max-w-7xl items-center justify-between gap-3 px-3 py-3 sm:px-4">
-          <Link href="/" className="flex min-w-0 shrink-0 items-center gap-3" onClick={() => setOpen(false)}>
+        <div className="relative mx-auto flex max-w-7xl items-center justify-between gap-3 px-3 py-3 pr-14 sm:px-4 sm:pr-16 xl:pr-4">
+          <Link href="/" className="flex min-w-0 shrink items-center gap-3" onClick={() => setOpen(false)}>
             <span className="grid size-9 shrink-0 place-items-center rounded bg-red-600 text-white shadow-lg shadow-red-600/25 sm:size-10">
               <Gauge size={22} />
             </span>
             <span className="min-w-0">
               <span className="block text-sm font-black uppercase tracking-[0.2em] text-white">{leagueConfig.shortName}</span>
-              <span className="hidden truncate text-xs uppercase tracking-[0.2em] text-zinc-500 xl:block">{leagueConfig.leagueName}</span>
+              <span className="hidden truncate text-xs uppercase tracking-[0.18em] text-zinc-500 2xl:block">{leagueConfig.leagueName}</span>
             </span>
           </Link>
-          <nav className="hidden min-w-0 items-center gap-0.5 lg:flex">
+          <nav className="hidden min-w-0 flex-1 items-center justify-center gap-0.5 xl:flex">
             {desktopNavItems.map(([label, href]) => (
               <Link
                 key={href}
                 href={href}
                 prefetch={shouldPrefetch(href)}
-                className="rounded px-2.5 py-2 text-[0.68rem] font-bold uppercase tracking-[0.1em] text-zinc-400 transition hover:bg-white/5 hover:text-white xl:px-3 xl:text-xs xl:tracking-[0.14em]"
+                className="whitespace-nowrap rounded px-2.5 py-2 text-[0.68rem] font-bold uppercase tracking-[0.08em] text-zinc-400 transition hover:bg-white/5 hover:text-white 2xl:px-3 2xl:text-xs 2xl:tracking-[0.12em]"
               >
                 {label}
               </Link>
@@ -73,38 +73,34 @@ export function SiteShell({ children, auth }: Readonly<{ children: React.ReactNo
           <div className="hidden shrink-0 items-center gap-2 md:flex">
             <a
               href={leagueConfig.discordUrl}
-              className="hidden rounded border border-cyan-400/40 px-3 py-2 text-xs font-bold uppercase tracking-[0.12em] text-cyan-100 transition hover:bg-cyan-400/10 xl:inline-flex"
+              className="hidden rounded border border-cyan-400/40 px-3 py-2 text-xs font-bold uppercase tracking-[0.1em] text-cyan-100 transition hover:bg-cyan-400/10 2xl:inline-flex"
             >
               Discord
             </a>
-            <PwaInstall />
             <Link
               href="/register"
-              className="rounded bg-red-600 px-3 py-2 text-xs font-bold uppercase tracking-[0.12em] text-white transition hover:bg-red-500"
+              className="rounded bg-red-600 px-3 py-2 text-xs font-bold uppercase tracking-[0.1em] text-white transition hover:bg-red-500"
             >
               Apply
             </Link>
             {auth.userId ? (
               <form action={logoutAction}>
-                <button className="rounded border border-white/10 px-3 py-2 text-xs font-bold uppercase tracking-[0.12em] text-zinc-200 transition hover:bg-white/5" type="submit">
+                <button className="rounded border border-white/10 px-3 py-2 text-xs font-bold uppercase tracking-[0.1em] text-zinc-200 transition hover:bg-white/5" type="submit">
                   Logout
                 </button>
               </form>
             ) : (
               <>
-                <Link href="/login" className="rounded border border-white/10 px-3 py-2 text-xs font-bold uppercase tracking-[0.12em] text-zinc-200 transition hover:bg-white/5">
+                <Link href="/login" className="rounded border border-white/10 px-3 py-2 text-xs font-bold uppercase tracking-[0.1em] text-zinc-200 transition hover:bg-white/5">
                   Login
                 </Link>
-                <Link href="/signup" className="rounded border border-cyan-400/40 px-3 py-2 text-xs font-bold uppercase tracking-[0.12em] text-cyan-100 transition hover:bg-cyan-400/10">
+                <Link href="/signup" className="rounded border border-cyan-400/40 px-3 py-2 text-xs font-bold uppercase tracking-[0.1em] text-cyan-100 transition hover:bg-cyan-400/10">
                   Signup
                 </Link>
               </>
             )}
           </div>
-          <div className="flex items-center gap-2 lg:hidden">
-            <div className="md:hidden">
-              <PwaInstall />
-            </div>
+          <div className="absolute right-3 top-3 flex shrink-0 items-center gap-2 sm:right-4 xl:hidden">
             <button
               className="rounded border border-white/10 p-2 text-zinc-300"
               aria-label="Toggle navigation"
@@ -116,7 +112,7 @@ export function SiteShell({ children, auth }: Readonly<{ children: React.ReactNo
           </div>
         </div>
         {open ? (
-          <nav className="border-t border-white/10 bg-black px-4 py-4 lg:hidden">
+          <nav className="border-t border-white/10 bg-black px-4 py-4 xl:hidden">
             <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
               {navItems.map(([label, href]) => (
                 <Link
@@ -129,6 +125,9 @@ export function SiteShell({ children, auth }: Readonly<{ children: React.ReactNo
                   {label}
                 </Link>
               ))}
+            </div>
+            <div className="mt-3">
+              <PwaInstall />
             </div>
             <div className="mt-3 grid grid-cols-2 gap-2 sm:hidden">
               <a href={leagueConfig.discordUrl} className="rounded border border-cyan-400/40 px-3 py-3 text-center text-xs font-black uppercase tracking-[0.14em] text-cyan-100">
