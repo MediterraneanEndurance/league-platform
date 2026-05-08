@@ -1,3 +1,4 @@
+import { unstable_rethrow } from "next/navigation";
 import { Clock3, Flag, Radio, Scale, ShieldCheck } from "lucide-react";
 import { ActionLink } from "@/components/action-link";
 import { Badge } from "@/components/badge";
@@ -33,6 +34,7 @@ async function getSafeHomepageActivity() {
   try {
     return await getHomepageActivity();
   } catch (error) {
+    unstable_rethrow(error);
     console.error("Race control activity failed to load", error);
     return null;
   }
