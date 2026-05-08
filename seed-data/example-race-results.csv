@@ -1,0 +1,6 @@
+driver_name,car_number,team_name,position,qualifying_position,best_lap,total_time,gap,laps_completed,penalties_seconds,dnf,dns,dsq,fastest_lap
+Thomas Reed,22,Velocity Works,1,2,1:42.381,45:14.920,Leader,26,0,false,false,false,true
+Alex Martin,7,Apex Vector Racing,2,1,1:42.644,45:18.301,+3.381,26,0,false,false,false,false
+Max Keller,95,Carbon Edge Racing,3,4,1:43.008,45:25.871,+10.951,26,5,false,false,false,false
+Daniel Rossi,11,Silverline Motorsport,4,3,1:43.190,45:30.617,+15.697,26,0,false,false,false,false
+Lucas Weber,34,Apex Vector Racing,5,5,1:43.880,DNF,DNF,18,0,true,false,false,false
