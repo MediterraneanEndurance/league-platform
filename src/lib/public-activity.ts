@@ -471,7 +471,7 @@ async function fetchHomepageActivity(): Promise<HomepageActivity | null> {
   };
 }
 
-export const getHomepageActivity = unstable_cache(fetchHomepageActivity, ["homepage-activity-v2"], {
+export const getHomepageActivity = unstable_cache(fetchHomepageActivity, ["homepage-activity-v3"], {
   revalidate: 300,
   tags: ["public-activity"],
 });
