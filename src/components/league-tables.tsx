@@ -57,12 +57,12 @@ export function StandingsTable({ standings, mode }: { standings: Standing[]; mod
   return (
     <div className="overflow-hidden rounded-lg border border-white/10 bg-black/30">
       <div className="overflow-x-auto">
-        <table className="min-w-[760px] text-left text-sm">
+        <table className="min-w-[680px] text-left text-sm">
           <thead className="sticky top-0 bg-zinc-950 text-xs uppercase tracking-[0.16em] text-zinc-400">
             <tr>
               <th className="px-4 py-3">Pos</th>
               <th className="px-4 py-3">{mode === "drivers" ? "Driver" : "Team"}</th>
-              <th className="px-4 py-3">Country</th>
+              {mode === "teams" ? <th className="px-4 py-3">Country</th> : null}
               {mode === "drivers" ? <th className="px-4 py-3">Team</th> : null}
               <th className="px-4 py-3 text-right">Pts</th>
               <th className="px-4 py-3 text-right">Wins</th>
@@ -89,8 +89,8 @@ export function StandingsTable({ standings, mode }: { standings: Standing[]; mod
                       team?.name
                     )}
                   </td>
-                  <td className="px-4 py-4 text-zinc-300">{countryFlag(mode === "drivers" ? driver?.country ?? "" : team?.country ?? "")}</td>
-                  {mode === "drivers" ? <td className="px-4 py-4 text-zinc-400">{team?.name ?? "Independent"}</td> : null}
+                  {mode === "teams" ? <td className="px-4 py-4 text-zinc-300">{countryFlag(team?.country ?? "")}</td> : null}
+                  {mode === "drivers" ? <td className="px-4 py-4 text-zinc-400">{team?.name ?? "N/A"}</td> : null}
                   <td className="px-4 py-4 text-right font-black text-cyan-200">{standing.totalPoints}</td>
                   <td className="px-4 py-4 text-right text-zinc-300">{standing.wins}</td>
                   <td className="px-4 py-4 text-right text-zinc-300">{standing.podiums}</td>
@@ -109,7 +109,7 @@ export function StandingsTable({ standings, mode }: { standings: Standing[]; mod
 }
 
 export function LatestResults() {
-  const completed = races.filter((race) => race.status === "completed");
+  const completed = races.filter((race) => race.status === "completed" && raceResults.some((result) => result.raceId === race.id));
   return (
     <div className="grid gap-4">
       {completed.map((race) => {
@@ -128,13 +128,14 @@ export function LatestResults() {
                   <Trophy size={17} className="text-cyan-300" /> Winner: {winner?.displayName}
                 </div>
                 <p>Podium: {podium.map((result) => getDriver(result.driverId)?.displayName).join(" / ")}</p>
-                <p>Fastest lap: {getDriver(podium.find((result) => result.fastestLap)?.driverId)?.displayName ?? "Thomas Reed"}</p>
+                <p>Fastest lap: {getDriver(podium.find((result) => result.fastestLap)?.driverId)?.displayName ?? "Not recorded"}</p>
               </div>
               <ActionLink href={`/races/${race.id}`} className="py-2">Full results</ActionLink>
             </div>
           </Card>
         );
       })}
+      {completed.length === 0 ? <EmptyState title="Results pending" body="Classifications will appear after the first LMGT3 sprint race is completed." /> : null}
     </div>
   );
 }

@@ -63,7 +63,7 @@ export default async function RaceDetailPage({ params }: { params: Promise<{ id:
               {drivers.filter((driver) => driver.approvalStatus === "approved").map((driver) => (
                 <div key={driver.id} className="flex justify-between rounded bg-white/5 p-3 text-sm">
                   <span className="font-semibold text-white">#{driver.carNumber} {driver.displayName}</span>
-                  <span className="text-zinc-400">{getTeam(driver.teamId)?.name ?? "Independent"}</span>
+                  <span className="text-zinc-400">{getTeam(driver.teamId)?.name ?? "N/A"}</span>
                 </div>
               ))}
             </div>

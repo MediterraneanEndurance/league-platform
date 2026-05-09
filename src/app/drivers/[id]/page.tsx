@@ -5,7 +5,7 @@ import { Badge } from "@/components/badge";
 import { Card, SectionHeader } from "@/components/card";
 import { ClassBadge } from "@/components/class-badge";
 import { getPublicDriverProfile } from "@/lib/public-activity";
-import { countryFlag, formatRaceDate } from "@/lib/utils";
+import { formatRaceDate } from "@/lib/utils";
 
 type StatCard = [label: string, value: number, Icon: typeof Trophy];
 
@@ -35,10 +35,10 @@ export default async function DriverProfilePage({
             <div className="mb-4 flex flex-wrap items-center gap-2">
               <Badge>{driver.approvalStatus}</Badge>
               <ClassBadge value={driver.preferredClass} />
-              <Badge>{driver.teamName ?? "Independent"}</Badge>
+              <Badge>{driver.teamName ?? "N/A"}</Badge>
             </div>
             <p className="text-sm font-black uppercase tracking-[0.24em] text-red-300">
-              {driver.carNumber ? `#${driver.carNumber}` : "Driver Entry"} | {countryFlag(driver.country)} {driver.country}
+              {driver.carNumber ? `#${driver.carNumber}` : "Driver Entry"}
             </p>
             <h1 className="mt-3 text-4xl font-black uppercase leading-none text-white md:text-6xl">{driver.displayName}</h1>
             <p className="mt-4 max-w-2xl text-sm leading-6 text-zinc-400">
@@ -49,10 +49,8 @@ export default async function DriverProfilePage({
             <p className="text-xs font-black uppercase tracking-[0.18em] text-zinc-500">Entry</p>
             <p className="mt-2 text-xl font-black uppercase text-white">{driver.preferredCar ?? "Car TBC"}</p>
             <div className="mt-4 grid gap-2 text-sm text-zinc-400">
-              <p className="flex justify-between gap-4"><span>Team</span><span className="text-white">{driver.teamName ?? "Independent"}</span></p>
-              <p className="flex justify-between gap-4"><span>Region</span><span className="text-white">{driver.region ?? "Europe"}</span></p>
-              <p className="flex justify-between gap-4"><span>Rating</span><span className="text-white">{driver.rating ?? "Unrated"}</span></p>
-              <p className="flex justify-between gap-4"><span>Safety</span><span className="text-white">{driver.safetyRating ?? "Pending"}</span></p>
+              <p className="flex justify-between gap-4"><span>Team</span><span className="text-white">{driver.teamName ?? "N/A"}</span></p>
+              <p className="flex justify-between gap-4"><span>Class</span><span className="text-white">{driver.preferredClass}</span></p>
             </div>
           </Card>
         </div>
