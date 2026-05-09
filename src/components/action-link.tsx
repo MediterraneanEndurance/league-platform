@@ -38,6 +38,8 @@ export function ExternalAction({
   return (
     <a
       href={href}
+      target="_blank"
+      rel="noopener noreferrer"
       className={cn(
         "inline-flex min-h-11 items-center justify-center rounded px-4 py-3 text-center text-xs font-black uppercase tracking-[0.12em] transition duration-200 sm:tracking-[0.16em]",
         variants[variant],

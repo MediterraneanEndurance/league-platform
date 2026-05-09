@@ -73,6 +73,8 @@ export function SiteShell({ children, auth }: Readonly<{ children: React.ReactNo
           <div className="hidden shrink-0 items-center gap-2 md:flex">
             <a
               href={leagueConfig.discordUrl}
+              target="_blank"
+              rel="noopener noreferrer"
               className="hidden rounded border border-cyan-400/40 px-3 py-2 text-xs font-bold uppercase tracking-[0.1em] text-cyan-100 transition hover:bg-cyan-400/10 2xl:inline-flex"
             >
               Discord
@@ -130,7 +132,7 @@ export function SiteShell({ children, auth }: Readonly<{ children: React.ReactNo
               <PwaInstall />
             </div>
             <div className="mt-3 grid grid-cols-2 gap-2 sm:hidden">
-              <a href={leagueConfig.discordUrl} className="rounded border border-cyan-400/40 px-3 py-3 text-center text-xs font-black uppercase tracking-[0.14em] text-cyan-100">
+              <a href={leagueConfig.discordUrl} target="_blank" rel="noopener noreferrer" className="rounded border border-cyan-400/40 px-3 py-3 text-center text-xs font-black uppercase tracking-[0.14em] text-cyan-100">
                 Discord
               </a>
               <Link href="/register" className="rounded bg-red-600 px-3 py-3 text-center text-xs font-black uppercase tracking-[0.14em] text-white" onClick={() => setOpen(false)}>
@@ -195,7 +197,7 @@ export function SiteShell({ children, auth }: Readonly<{ children: React.ReactNo
                   {label}
                 </Link>
               ))}
-              <a href={leagueConfig.discordUrl} className="text-xs font-bold uppercase tracking-[0.18em] text-cyan-200 transition hover:text-cyan-100">
+              <a href={leagueConfig.discordUrl} target="_blank" rel="noopener noreferrer" className="text-xs font-bold uppercase tracking-[0.18em] text-cyan-200 transition hover:text-cyan-100">
                 Discord
               </a>
             </div>

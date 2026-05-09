@@ -81,7 +81,7 @@ export default async function Home() {
             </p>
             <div className="mt-8 grid gap-3 sm:flex sm:flex-row">
               <ExternalAction href={leagueConfig.discordUrl} variant="secondary" className="w-full sm:w-auto">Join Discord</ExternalAction>
-              <ActionLink href="/register" variant="primary" className="w-full sm:w-auto">Register Driver</ActionLink>
+              <ActionLink href="/signup" variant="primary" className="w-full sm:w-auto">Sign Up</ActionLink>
             </div>
             <div className="mt-10 max-w-2xl">
               <SessionStrip />

@@ -4,7 +4,7 @@ export const leagueConfig = {
   description:
     "A professional European Le Mans Ultimate community for clean endurance racing, transparent race control and broadcast-ready grids.",
   siteUrl: process.env.NEXT_PUBLIC_SITE_URL ?? "https://league-platform.vercel.app",
-  discordUrl: process.env.NEXT_PUBLIC_DISCORD_INVITE ?? "https://discord.gg/med-endurance",
+  discordUrl: process.env.NEXT_PUBLIC_DISCORD_INVITE ?? "https://discord.gg/7wMEPYxmec",
   twitchUrl: process.env.NEXT_PUBLIC_TWITCH_URL ?? "https://www.twitch.tv/medenduranceleague",
   twitchChannel: process.env.NEXT_PUBLIC_TWITCH_CHANNEL ?? "medenduranceleague",
   kickUrl: process.env.NEXT_PUBLIC_KICK_URL ?? "https://kick.com/medenduranceleague",
