@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import { Analytics } from "@vercel/analytics/react";
 import { SiteShell } from "@/components/layout";
 import { getAuthState } from "@/lib/auth";
 import { leagueConfig } from "@/lib/league-config";
@@ -67,6 +68,7 @@ export default async function RootLayout({
     >
       <body className="min-h-full">
         <SiteShell auth={auth}>{children}</SiteShell>
+        <Analytics />
       </body>
     </html>
   );
