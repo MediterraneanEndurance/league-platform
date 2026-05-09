@@ -109,7 +109,7 @@ export const races: Race[] = [
     setup: "Fixed setup",
     carClass: "LMGT3",
     registrationStatus: "closed",
-    status: "completed",
+    status: "test",
     streamUrl: leagueConfig.twitchUrl,
     replayUrl: "https://www.youtube.com/@medenduranceleague",
   },

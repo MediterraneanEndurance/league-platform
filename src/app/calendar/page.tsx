@@ -5,15 +5,10 @@ import { CountdownTimer } from "@/components/countdown-timer";
 import { RaceCard } from "@/components/league-tables";
 import { races } from "@/lib/league-data";
 
-const calendarNotes: Record<string, string> = {
-  "round-1-spa-francorchamps": "The Classic Season Opener",
-  "round-2-monza": "The Temple of Speed",
-  "round-3-fuji": "Technical & High Speed",
-  "round-4-le-mans": "The Grand Finale",
-};
+
 
 export default function CalendarPage() {
-  const seriesRaces = races.filter((race) => race.status !== "completed");
+  const seriesRaces = races.filter((race) => race.status === "upcoming" || race.status === "live");
   const openingRound = seriesRaces.find((race) => race.id === "round-1-spa-francorchamps") ?? seriesRaces[0];
 
   return (
@@ -50,32 +45,7 @@ export default function CalendarPage() {
           </div>
         </div>
       </Card>
-      <div className="mb-8 overflow-hidden rounded-lg border border-white/10 bg-black/30">
-        <div className="overflow-x-auto">
-          <table className="min-w-[760px] text-left text-sm">
-            <thead className="bg-white/5 text-xs uppercase tracking-[0.16em] text-zinc-400">
-              <tr>
-                <th className="px-4 py-3">Date</th>
-                <th className="px-4 py-3">Circuit</th>
-                <th className="px-4 py-3">Round Identity</th>
-                <th className="px-4 py-3">Start Time</th>
-                <th className="px-4 py-3">Format</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-white/10">
-              {seriesRaces.map((race) => (
-                <tr key={race.id} className="transition hover:bg-white/[0.04]">
-                  <td className="px-4 py-4 font-black uppercase text-white">{race.name.split(" - ")[0]}</td>
-                  <td className="px-4 py-4 font-semibold text-white">{race.trackName}</td>
-                  <td className="px-4 py-4 text-zinc-300">{calendarNotes[race.id]}</td>
-                  <td className="px-4 py-4 text-cyan-200">21:00 TRT / 20:00 CEST</td>
-                  <td className="px-4 py-4 text-zinc-400">{race.format}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      </div>
+
       <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-4">
         {seriesRaces.map((race) => (
           <RaceCard key={race.id} race={race} />

@@ -1,5 +1,5 @@
 export type UserRole = "admin" | "steward" | "driver" | "viewer";
-export type RaceStatus = "upcoming" | "live" | "completed";
+export type RaceStatus = "upcoming" | "live" | "completed" | "test";
 export type RegistrationStatus = "open" | "closed" | "waitlist";
 export type ReportStatus = "pending" | "under_review" | "accepted" | "rejected";
 export type StreamPlatform = "twitch" | "kick" | "youtube";

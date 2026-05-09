@@ -121,8 +121,8 @@ export default async function Home() {
                 labelClassName="sm:text-xs sm:tracking-[0.16em]"
               />
               <div className="min-w-0 rounded bg-white/5 p-3 text-center sm:p-4">
-                <span className="block truncate text-base font-black text-white sm:text-3xl">{raceLength}</span>
-                <span className="text-[0.66rem] uppercase tracking-[0.12em] text-zinc-500 sm:text-xs sm:tracking-[0.16em]">Format</span>
+                <span className="block break-words text-sm font-black leading-tight text-white sm:text-lg">{raceLength}</span>
+                <span className="mt-1 block text-[0.66rem] uppercase tracking-[0.12em] text-zinc-500 sm:text-xs sm:tracking-[0.16em]">Format</span>
               </div>
             </div>
             <div className="mt-5 flex flex-wrap gap-2">
@@ -205,7 +205,8 @@ export default async function Home() {
           </div>
         ) : (
           <Card className="border-white/10 bg-black/40">
-            <p className="text-sm leading-6 text-zinc-400">Public activity will appear after driver approvals, classified results or official decisions are published.</p>
+            <p className="font-bold text-white">No public activity yet.</p>
+            <p className="mt-2 text-sm leading-6 text-zinc-400">Approved drivers, team entries and published classifications will appear here once the season begins.</p>
           </Card>
         )}
       </section>
@@ -251,7 +252,7 @@ export default async function Home() {
               <span>Venue</span>
               <span className="hidden sm:block">Brief</span>
             </div>
-            {races.filter((race) => race.status !== "completed").map((race) => (
+            {races.filter((race) => race.status === "upcoming" || race.status === "live").map((race) => (
               <div key={race.id} className="grid grid-cols-[0.8fr_1.2fr] gap-3 border-t border-white/10 px-3 py-3 text-sm sm:grid-cols-[0.65fr_1.1fr_1fr]">
                 <div>
                   <p className="font-black uppercase text-white">{race.name.split(" - ")[0]}</p>
