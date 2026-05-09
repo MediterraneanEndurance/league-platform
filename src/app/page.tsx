@@ -4,9 +4,10 @@ import { ActionLink, ExternalAction } from "@/components/action-link";
 import { Badge } from "@/components/badge";
 import { Card, SectionHeader } from "@/components/card";
 import { ClassBadge } from "@/components/class-badge";
+import { CountdownTimer } from "@/components/countdown-timer";
 import { LatestResults, StandingsTable } from "@/components/league-tables";
 import { SessionStrip } from "@/components/session-strip";
-import { driverStandings, newsPosts, nextRace } from "@/lib/league-data";
+import { driverStandings, newsPosts, nextRace, races } from "@/lib/league-data";
 import { leagueConfig } from "@/lib/league-config";
 import { getHomepageActivity, getPublicActivityStats, type PublicNextRace } from "@/lib/public-activity";
 import { formatRaceDate } from "@/lib/utils";
@@ -18,12 +19,26 @@ const featureCards: Array<[string, string, typeof Users]> = [
   ["Results", "Verified classifications", Trophy],
 ];
 
-function countdownParts(value: string) {
-  const diff = Math.max(0, new Date(value).getTime() - Date.now());
-  const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-  const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
-  return { days, hours };
-}
+const calendarNotes: Record<string, string> = {
+  "round-1-spa-francorchamps": "The Classic Season Opener",
+  "round-2-monza": "The Temple of Speed",
+  "round-3-fuji": "Technical & High Speed",
+  "round-4-le-mans": "The Grand Finale",
+};
+
+const formatHighlights = [
+  ["Platform", "Le Mans Ultimate (LMU)"],
+  ["Race Day", "Every Friday @ 21:00 TRT"],
+  ["European Time", "20:00 CEST / 21:00 TRT"],
+  ["Server", "Europe, GMT+3 / TRT"],
+];
+
+const technicalHighlights = [
+  ["Qualifying", "20 minutes, public session"],
+  ["Race", "40 minutes"],
+  ["Damage", "50%, beginner friendly but penalizing"],
+  ["Weather", "Dynamic, sunset finish from 17:30 in-game"],
+];
 
 function fallbackNextRace(): PublicNextRace {
   return {
@@ -42,7 +57,7 @@ function fallbackNextRace(): PublicNextRace {
 export default async function Home() {
   const [activity, homepageActivity] = await Promise.all([getPublicActivityStats(), getHomepageActivity()]);
   const publicNextRace = homepageActivity?.nextRace ?? fallbackNextRace();
-  const countdown = countdownParts(publicNextRace.raceDate);
+  const openingRound = races.find((race) => race.id === "round-1-spa-francorchamps") ?? publicNextRace;
   const leaders = driverStandings.slice(0, 3);
   const raceLength = publicNextRace.category === "Sprint Race" ? "Sprint" : "Endurance";
   const statItems: Array<[string, number]> = activity
@@ -97,14 +112,14 @@ export default async function Home() {
             <h2 className="text-3xl font-black uppercase text-white">{publicNextRace.name}</h2>
             <p className="mt-2 text-zinc-400">{publicNextRace.trackName}</p>
             <div className="mt-6 grid grid-cols-3 gap-2 sm:gap-3">
-              <div className="min-w-0 rounded bg-white/5 p-3 text-center sm:p-4">
-                <span className="block text-2xl font-black text-cyan-200 sm:text-3xl">{countdown.days}</span>
-                <span className="text-[0.66rem] uppercase tracking-[0.12em] text-zinc-500 sm:text-xs sm:tracking-[0.16em]">Days</span>
-              </div>
-              <div className="min-w-0 rounded bg-white/5 p-3 text-center sm:p-4">
-                <span className="block text-2xl font-black text-white sm:text-3xl">{countdown.hours}</span>
-                <span className="text-[0.66rem] uppercase tracking-[0.12em] text-zinc-500 sm:text-xs sm:tracking-[0.16em]">Hours</span>
-              </div>
+              <CountdownTimer
+                targetDate={publicNextRace.raceDate}
+                units={["days", "hours"]}
+                className="contents"
+                cellClassName="min-w-0 border-0 p-3 sm:p-4"
+                valueClassName="text-2xl sm:text-3xl first:text-cyan-200"
+                labelClassName="sm:text-xs sm:tracking-[0.16em]"
+              />
               <div className="min-w-0 rounded bg-white/5 p-3 text-center sm:p-4">
                 <span className="block truncate text-base font-black text-white sm:text-3xl">{raceLength}</span>
                 <span className="text-[0.66rem] uppercase tracking-[0.12em] text-zinc-500 sm:text-xs sm:tracking-[0.16em]">Format</span>
@@ -195,50 +210,82 @@ export default async function Home() {
         )}
       </section>
 
-      <section className="mx-auto grid max-w-7xl gap-8 px-4 py-14 lg:grid-cols-[0.95fr_1.05fr]">
+      <section className="mx-auto grid max-w-7xl gap-8 px-4 py-14 lg:grid-cols-[0.9fr_1.1fr]">
         <Card className="border-cyan-400/20 bg-cyan-400/5">
-          <div className="mb-4 flex items-center gap-2 text-sm font-black uppercase tracking-[0.18em] text-cyan-200">
-            <Flag size={18} /> Active Championship
+          <div className="mb-4 flex flex-wrap items-center gap-2 text-sm font-black uppercase tracking-[0.18em] text-cyan-200">
+            <Flag size={18} /> Sprint Series
+            <Badge tone="border-red-400/50 bg-red-600/15 text-red-100">Fixed Setup</Badge>
+            <Badge tone="border-cyan-300/50 bg-cyan-300/10 text-cyan-100">3x Wear / 3x Fuel</Badge>
           </div>
           <h2 className="text-2xl font-black uppercase text-white">Season 1 race control is open</h2>
           <p className="mt-3 text-sm leading-6 text-zinc-300">
-            The championship calendar, entry list, classifications and sporting decisions are kept in one public rhythm:
-            register, race, report, review and publish.
+            Friday night LMU sprint racing with tactical pitstops, public qualifying traffic management and clear European
+            timezone guidance for every driver briefing.
           </p>
-          <div className="mt-5 grid gap-3 sm:grid-cols-3">
-            {["Entry review", "Briefing notes", "Published results"].map((item) => (
-              <div key={item} className="rounded border border-white/10 bg-black/35 p-3 text-xs font-black uppercase tracking-[0.14em] text-zinc-300">
-                {item}
+          <div className="mt-5 grid gap-3 sm:grid-cols-2">
+            {formatHighlights.map(([label, value]) => (
+              <div key={label} className="rounded border border-white/10 bg-black/35 p-3">
+                <p className="text-[0.65rem] font-black uppercase tracking-[0.16em] text-zinc-500">{label}</p>
+                <p className="mt-1 text-sm font-bold text-white">{value}</p>
               </div>
             ))}
+          </div>
+          <div className="mt-5 grid gap-3">
+            <CountdownTimer
+              targetDate={openingRound.raceDate}
+              className="grid-cols-2 sm:grid-cols-4"
+              cellClassName="bg-black/35"
+              valueClassName="text-3xl text-cyan-200"
+              labelClassName="text-xs tracking-[0.16em]"
+            />
+            <ActionLink href="/register" variant="primary" className="w-full">Registration Open</ActionLink>
           </div>
         </Card>
         <Card>
           <div className="mb-4 flex items-center gap-2 text-sm font-black uppercase tracking-[0.18em] text-cyan-200">
-            <Scale size={18} /> Official Decisions
+            <CalendarDays size={18} /> June 2026 Race Calendar
           </div>
-          {homepageActivity?.decisions.length ? (
-            <div className="grid gap-3">
-              {homepageActivity.decisions.map((decision) => (
-                <div key={decision.id} className="rounded border border-white/10 bg-white/[0.03] p-4">
-                  <div className="flex flex-col justify-between gap-2 sm:flex-row sm:items-start">
-                    <div>
-                      <p className="text-xs uppercase tracking-[0.18em] text-zinc-500">{decision.raceName}</p>
-                      <h3 className="mt-1 font-black uppercase text-white">
-                        {decision.carNumber ? `#${decision.carNumber} ` : ""}{decision.driverName}
-                      </h3>
-                    </div>
-                    <Badge>{decision.status}</Badge>
-                  </div>
-                  <p className="mt-3 text-sm leading-6 text-zinc-400">{decision.decision}</p>
-                  {decision.penalty ? <p className="mt-2 text-sm text-cyan-100">{decision.penalty}</p> : null}
-                </div>
-              ))}
+          <div className="overflow-hidden rounded border border-white/10">
+            <div className="grid grid-cols-[0.8fr_1.2fr] bg-white/5 px-3 py-2 text-[0.65rem] font-black uppercase tracking-[0.16em] text-zinc-500 sm:grid-cols-[0.65fr_1.1fr_1fr]">
+              <span>Date</span>
+              <span>Venue</span>
+              <span className="hidden sm:block">Brief</span>
             </div>
-          ) : (
-            <p className="text-sm leading-6 text-zinc-500">No public steward decisions have been published for completed races yet.</p>
-          )}
-          <ActionLink href="/stewards/decisions" className="mt-5 w-full">Steward Bulletin</ActionLink>
+            {races.filter((race) => race.status !== "completed").map((race) => (
+              <div key={race.id} className="grid grid-cols-[0.8fr_1.2fr] gap-3 border-t border-white/10 px-3 py-3 text-sm sm:grid-cols-[0.65fr_1.1fr_1fr]">
+                <div>
+                  <p className="font-black uppercase text-white">{race.name.split(" - ")[0]}</p>
+                  <p className="mt-1 text-xs text-cyan-200">21:00 TRT / 20:00 CEST</p>
+                </div>
+                <div>
+                  <p className="font-bold text-white">{race.trackName}</p>
+                  <p className="mt-1 text-xs text-zinc-500">{race.format}</p>
+                </div>
+                <p className="hidden text-sm text-zinc-400 sm:block">{calendarNotes[race.id]}</p>
+              </div>
+            ))}
+          </div>
+        </Card>
+        <Card className="lg:col-span-2">
+          <div className="mb-4 flex items-center gap-2 text-sm font-black uppercase tracking-[0.18em] text-cyan-200">
+            <Scale size={18} /> Technical Session Rules
+          </div>
+          <div className="mb-4 flex flex-wrap gap-2">
+            <Badge tone="border-red-400/50 bg-red-600/15 text-red-100">Fixed Setup</Badge>
+            <Badge tone="border-cyan-300/50 bg-cyan-300/10 text-cyan-100">3x Tire Wear</Badge>
+            <Badge tone="border-cyan-300/50 bg-cyan-300/10 text-cyan-100">3x Fuel Usage</Badge>
+          </div>
+          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+            {technicalHighlights.map(([label, value]) => (
+              <div key={label} className="rounded border border-white/10 bg-white/[0.03] p-4">
+                <p className="text-xs font-black uppercase tracking-[0.16em] text-zinc-500">{label}</p>
+                <p className="mt-2 text-sm font-semibold leading-6 text-zinc-200">{value}</p>
+              </div>
+            ))}
+          </div>
+          <p className="mt-4 text-sm leading-6 text-zinc-400">
+            The sprint format is built around tactical pitstops: 3x fuel and tire multipliers make a stop mandatory to finish cleanly.
+          </p>
         </Card>
       </section>
 
