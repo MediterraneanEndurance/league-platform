@@ -1,4 +1,5 @@
 import { unstable_cache } from "next/cache";
+import { nextRace as canonicalNextRace } from "@/lib/league-data";
 import { createSupabaseServiceClient, isSupabaseConfigured } from "@/lib/supabase-server";
 
 export type PublicStewardDecision = {
@@ -350,7 +351,7 @@ async function fetchHomepageActivity(): Promise<HomepageActivity | null> {
 
   const completedRaceById = await fetchCompletedRaceMap(supabase);
   const completedRaceIds = Array.from(completedRaceById.keys());
-  const [approvedDriversResult, teamsResult, resultsResult, penaltiesResult, decisions, nextRaceResult] = await Promise.all([
+  const [approvedDriversResult, teamsResult, resultsResult, penaltiesResult, decisions] = await Promise.all([
     supabase
       .from("public_drivers")
       .select("id, display_name, car_number, country, preferred_class, created_at")
@@ -374,14 +375,6 @@ async function fetchHomepageActivity(): Promise<HomepageActivity | null> {
           .limit(3)
       : Promise.resolve({ data: [] }),
     fetchPublicStewardDecisions(3),
-    supabase
-      .from("races")
-      .select("id, name, track_name, race_date, format, category, setup, car_class, registration_status")
-      .in("status", ["upcoming", "live"])
-      .gte("race_date", new Date().toISOString())
-      .order("race_date", { ascending: true })
-      .limit(1)
-      .maybeSingle(),
   ]);
 
   const resultRows = (resultsResult.data ?? []) as ResultSummary[];
@@ -459,33 +452,26 @@ async function fetchHomepageActivity(): Promise<HomepageActivity | null> {
     });
   }
 
-  const nextRace = nextRaceResult.data as PublicNextRace | null;
-
   return {
     items: items
       .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
       .slice(0, 8),
     decisions,
-    nextRace: nextRace
-      ? {
-          id: nextRace.id,
-          name: nextRace.name,
-          trackName: nextRace.trackName ?? (nextRace as unknown as { track_name?: string }).track_name ?? "Race venue",
-          raceDate: nextRace.raceDate ?? (nextRace as unknown as { race_date?: string }).race_date ?? new Date().toISOString(),
-          format: nextRace.format,
-          category: nextRace.category,
-          setup: nextRace.setup,
-          carClass: nextRace.carClass ?? (nextRace as unknown as { car_class?: string }).car_class ?? "Multi-class",
-          registrationStatus:
-            nextRace.registrationStatus ??
-            (nextRace as unknown as { registration_status?: string }).registration_status ??
-            "closed",
-        }
-      : null,
+    nextRace: {
+      id: canonicalNextRace.id,
+      name: canonicalNextRace.name,
+      trackName: canonicalNextRace.trackName,
+      raceDate: canonicalNextRace.raceDate,
+      format: canonicalNextRace.format,
+      category: canonicalNextRace.category,
+      setup: canonicalNextRace.setup,
+      carClass: canonicalNextRace.carClass,
+      registrationStatus: canonicalNextRace.registrationStatus,
+    },
   };
 }
 
-export const getHomepageActivity = unstable_cache(fetchHomepageActivity, ["homepage-activity-v1"], {
+export const getHomepageActivity = unstable_cache(fetchHomepageActivity, ["homepage-activity-v2"], {
   revalidate: 300,
   tags: ["public-activity"],
 });

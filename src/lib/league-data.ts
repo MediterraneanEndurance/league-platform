@@ -160,5 +160,5 @@ export const getRace = (raceId?: string) => races.find((race) => race.id === rac
 
 export const nextRace =
   races
-    .filter((race) => race.status !== "completed")
+    .filter((race) => race.status === "upcoming" || race.status === "live")
     .sort((a, b) => new Date(a.raceDate).getTime() - new Date(b.raceDate).getTime())[0] ?? races[0];
