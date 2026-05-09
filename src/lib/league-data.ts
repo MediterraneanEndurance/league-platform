@@ -98,21 +98,7 @@ export const races: Race[] = [
     status: "upcoming",
     streamUrl: leagueConfig.twitchUrl,
   },
-  {
-    id: "preseason-portimao",
-    championshipId: "mel-multiclass-2026",
-    name: "Preseason Test - Portimao",
-    trackName: "Algarve International Circuit",
-    raceDate: "2026-05-03T18:00:00+02:00",
-    format: "Practice + Qualifying + Test Race",
-    category: "Test Race",
-    setup: "Fixed setup",
-    carClass: "LMGT3",
-    registrationStatus: "closed",
-    status: "test",
-    streamUrl: leagueConfig.twitchUrl,
-    replayUrl: "https://www.youtube.com/@medenduranceleague",
-  },
+
 ];
 
 export const raceResults: RaceResult[] = [];

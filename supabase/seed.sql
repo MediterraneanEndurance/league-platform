@@ -18,17 +18,11 @@ insert into public.drivers (id, display_name, country, region, car_number, team_
 ('40000000-0000-0000-0000-000000000005', 'Max Keller', 'Austria', 'Vienna', 95, '30000000-0000-0000-0000-000000000004', 'maxkeller', '76561198000000095', 'Hypercar', 'Hypercar class entry', 1770, 'A', 'approved');
 
 insert into public.races (id, championship_id, name, track_name, race_date, format, category, setup, car_class, registration_status, status, stream_url, replay_url) values
-('50000000-0000-0000-0000-000000000001', '20000000-0000-0000-0000-000000000001', 'Preseason Test - Portimao', 'Algarve International Circuit', '2026-05-03 18:00:00+02', 'Practice + Qualifying + Test Race', 'Test Race', 'Fixed setup', 'LMGT3', 'closed', 'completed', 'https://www.twitch.tv/medenduranceleague', 'https://www.youtube.com/@medenduranceleague'),
 ('50000000-0000-0000-0000-000000000002', '20000000-0000-0000-0000-000000000001', 'June 12 - Spa-Francorchamps', 'Circuit de Spa-Francorchamps', '2026-06-12 21:00:00+03', '20m Qualifying + 40m Sprint Race', 'Sprint Race', 'Fixed setup', 'LMGT3', 'open', 'upcoming', 'https://www.twitch.tv/medenduranceleague', null),
 ('50000000-0000-0000-0000-000000000003', '20000000-0000-0000-0000-000000000001', 'June 19 - Monza', 'Autodromo Nazionale Monza', '2026-06-19 21:00:00+03', '20m Qualifying + 40m Sprint Race', 'Sprint Race', 'Fixed setup', 'LMGT3', 'open', 'upcoming', 'https://www.twitch.tv/medenduranceleague', null),
 ('50000000-0000-0000-0000-000000000004', '20000000-0000-0000-0000-000000000001', 'June 26 - Fuji Speedway', 'Fuji Speedway', '2026-06-26 21:00:00+03', '20m Qualifying + 40m Sprint Race', 'Sprint Race', 'Fixed setup', 'LMGT3', 'open', 'upcoming', 'https://www.twitch.tv/medenduranceleague', null),
 ('50000000-0000-0000-0000-000000000005', '20000000-0000-0000-0000-000000000001', 'July 3 - Le Mans', 'Circuit de la Sarthe', '2026-07-03 21:00:00+03', '20m Qualifying + 40m Sprint Race', 'Sprint Race', 'Fixed setup', 'LMGT3', 'open', 'upcoming', 'https://www.twitch.tv/medenduranceleague', null);
 
-insert into public.race_results (race_id, driver_id, team_id, position, qualifying_position, points, best_lap, total_time, gap, laps_completed, penalties_seconds, penalty_points, fastest_lap) values
-('50000000-0000-0000-0000-000000000001', '40000000-0000-0000-0000-000000000004', '30000000-0000-0000-0000-000000000003', 1, 2, 26, '1:42.381', '45:14.920', 'Leader', 26, 0, 0, true),
-('50000000-0000-0000-0000-000000000001', '40000000-0000-0000-0000-000000000001', '30000000-0000-0000-0000-000000000001', 2, 1, 18, '1:42.644', '45:18.301', '+3.381', 26, 0, 0, false),
-('50000000-0000-0000-0000-000000000001', '40000000-0000-0000-0000-000000000005', '30000000-0000-0000-0000-000000000004', 3, 4, 15, '1:43.008', '45:25.871', '+10.951', 26, 5, 1, false),
-('50000000-0000-0000-0000-000000000001', '40000000-0000-0000-0000-000000000003', '30000000-0000-0000-0000-000000000002', 4, 3, 12, '1:43.190', '45:30.617', '+15.697', 26, 0, 0, false);
 
 insert into public.news_posts (title, body, published) values
 ('Driver applications open for the first MEL endurance season', 'Applications are reviewed manually to keep the grid clean and broadcast-ready.', true),
